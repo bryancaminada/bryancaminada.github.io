@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentín</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff99cc, #ff66b3);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Corazones flotantes */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            transform: rotate(-45deg);
+            animation: float 5s infinite ease-in-out;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 10px;
+            bottom: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(-45deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) translateX(20px) rotate(-45deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-50vh) translateX(50vw) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .question {
+            font-size: 32px;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background-color: #ff1493;
+            color: white;
+        }
+
+        .no-btn {
+            background-color: #ff0000; /* Cambiado a rojo */
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .response {
+            font-size: 32px;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Estilo para la imagen emergente */
+        .image-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: auto;
+            display: none;
+            z-index: 20;
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-popup.show {
+            display: block;
+        }
+
+        /* Estilo para el reproductor de audio */
+        .audio-container {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 30;
+        }
+
+        .audio-container audio {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Corazones flotantes -->
+    <div class="heart" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="heart" style="top: 20%; left: 50%; animation-delay: 1s;"></div>
+    <div class="heart" style="top: 30%; left: 70%; animation-delay: 2s;"></div>
+    <div class="heart" style="top: 40%; left: 30%; animation-delay: 3s;"></div>
+    <div class="heart" style="top: 50%; left: 80%; animation-delay: 4s;"></div>
+
+    <div class="container">
+        <div class="question">
+            ¿Quieres ser mi San Valentín, Anais Rojas? ❤️
+        </div>
+        <div class="buttons">
+            <button class="yes-btn" id="yes-btn">Sí</button>
+            <button class="no-btn" id="no-btn">No</button>
+        </div>
+        <div class="response hidden" id="response">
+            Gracias señorita, nos vemos el 14 de febrero ❤️
+        </div>
+    </div>
+
+    <!-- Imagen emergente -->
+    <img src="https://i.pinimg.com/474x/8a/e0/44/8ae04469ad224e03029b7a37a367b73e.jpg" alt="Imagen emergente" class="image-popup" id="image-popup">
+
+    <!-- Reproductor de audio -->
+    <div class="audio-container">
+        <audio controls autoplay loop>
+            <source src="musica.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+    </div>
+
+    <script>
+        // Generar corazones dinámicamente
+        const body = document.body;
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.top = `${Math.random() * 100}%`;
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            body.appendChild(heart);
+        }
+
+        // Evento para el botón "Sí"
+        const yesButton = document.getElementById('yes-btn');
+        const noButton = document.getElementById('no-btn');
+        const question = document.querySelector('.question');
+        const buttons = document.querySelector('.buttons');
+        const response = document.getElementById('response');
+        const imagePopup = document.getElementById('image-popup');
+
+        yesButton.addEventListener('click', () => {
+            question.classList.add('hidden');
+            buttons.classList.add('hidden');
+            response.classList.remove('hidden');
+        });
+
+        // Evento para el botón "No"
+        noButton.addEventListener('click', () => {
+            const newYesButton = document.createElement('button');
+            newYesButton.textContent = 'Sí';
+            newYesButton.classList.add('yes-btn');
+            newYesButton.addEventListener('click', () => {
+                question.classList.add('hidden');
+                buttons.classList.add('hidden');
+                response.classList.remove('hidden');
+            });
+
+            buttons.innerHTML = ''; // Limpiar los botones actuales
+            buttons.appendChild(newYesButton); // Agregar el nuevo botón "Sí"
+
+            // Mostrar la imagen emergente
+            imagePopup.classList.add('show');
+        });
+    </script>
+</body>
+</html>
